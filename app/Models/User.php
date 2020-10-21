@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function contacts()
+    {
+        return $this->morphMany(Contacts::class, 'account');
+    }
+    function products (){
+        return $this->hasMany(Products::class ,"seller_id" ,"id");
+    }
+
 }

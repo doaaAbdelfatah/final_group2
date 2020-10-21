@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ContactTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Models\Brand;
@@ -39,7 +40,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::view('/dashboard',"admin.dashboard")->middleware(["auth" ,"auth.admin"]);
 
 
-Route::prefix("/brand")->middleware(["auth" ,"auth.admin"])->group(function(){
+Route::prefix("/brand")->middleware(["auth" ,"auth.admin" ,"auth.adminonly"])->group(function(){
     Route::get("/" , [BrandController::class , "index"])->name("brands");
     Route::get("/delete/{id}" , [BrandController::class , "delete"])->where("id","[0-9]+")->name("brands_delete");
     Route::get("/edit/{id}" , [BrandController::class , "edit"])->where("id","[0-9]+")->name("brands_edit");
@@ -48,15 +49,20 @@ Route::prefix("/brand")->middleware(["auth" ,"auth.admin"])->group(function(){
 
 });
 
-Route::resource("/types" , ContactTypeController::class)->except(["create"])->middleware(["auth" ,"auth.admin"]);
+Route::resource("/types" , ContactTypeController::class)->except(["create"])->middleware(["auth" ,"auth.admin" ,"auth.adminonly"]);
 
-Route::get("/users/all" , [UserController::class ,"index"])->name("users.all")->middleware(["auth" ,"auth.admin"]);
+Route::prefix("/users")->middleware(["auth" ,"auth.admin" ,"auth.adminonly"])->group(function(){
+    Route::get("/" , [UserController::class ,"index"])->name("users.all");
+    Route::get("/create" , [UserController::class ,"create"])->name("users.create");
+    Route::post("/" , [UserController::class ,"store"])->name("users.store");
+});
 
 
 
-Route::resource("/category"  ,CategoryController::class)->middleware(["auth" ,"auth.admin"]);
+
+Route::resource("/category"  ,CategoryController::class)->middleware(["auth" ,"auth.admin","auth.adminonly"]);
 Route::resource("/product"  ,ProductController::class)->middleware(["auth" ,"auth.admin"]);
-Route::resource("/supplier"  ,SupplierController::class)->middleware(["auth" ,"auth.admin"]);
+Route::resource("/supplier"  ,SupplierController::class)->middleware(["auth" ,"auth.admin","auth.adminonly"]);
 
 Route::get("/contact/create/{type}/{id}" ,[ContactsController::class ,"create"])->middleware(["auth" ,"auth.admin"]);
 Route::post("/contact/{type}/{id}" ,[ContactsController::class ,"store"]);
@@ -68,4 +74,8 @@ Route::post("/lang" ,function(Request $request){
  Route::prefix("/product/images")->middleware(["auth" ,"auth.admin"])->group(function(){
     Route::get("/{product}/create" ,[ProductImageController::class ,"create"]);
     Route::post("/{product}" ,[ProductImageController::class ,"store"]);
+});
+
+ Route::prefix("/user")->group(function(){
+    Route::get("/category/{category}" ,[CategoryController::class ,"get_products"]);
 });

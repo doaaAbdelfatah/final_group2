@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
     <div class="row">
-        @foreach (App\Models\Products::orderBy("created_at" ,"desc")->get() as $product)            
+        @foreach ($category->products as $product)            
       
         <div class="col-md-3">
         <div id="carouselExampleControls{{$product->id}}" class="carousel slide" data-ride="carousel">
@@ -30,4 +31,5 @@
         </div>
         @endforeach
     </div>
+</div>
 @endsection

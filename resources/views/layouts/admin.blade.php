@@ -32,8 +32,58 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                            <li>Manage Users</li>
+                    <ul class="navbar-nav mr-auto">                   
+                      @if (auth()->user()->role == "admin" || auth()->user()->role == "super admin" )
+                          
+                    
+                          <li class="nav-item">
+                          <a class="nav-link" href="{{route("types.index")}}">@lang('messages.Contact_Types')</a>
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              @lang('messages.Users')
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{route("users.all")}}">@lang('messages.Show All System Users')</a>                
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="{{route("users.create")}}">Add New User</a>
+                            </div>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{route("brands")}}">@lang('messages.Brands')</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 @lang('messages.Categories') 
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{{route("category.create")}}">@lang('messages.Add New Category')</a>
+                                <a class="dropdown-item" href="{{route("category.index")}}">@lang('messages.Show All categories')</a>
+                               
+                              </div>
+                            </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              @lang('messages.Suppliers')
+                              {{-- {{trans_choice('messages.apples',30)}} --}}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{{route("supplier.create")}}">@lang('messages.Add Supplier')</a>
+                              <a class="dropdown-item" href="{{route("supplier.index")}}">@lang('messages.Show Suppliers')</a>
+                              
+                            </div>
+                          </li> 
+                          @endif
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              @lang('messages.Products')
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{route("product.create")}}"> {{__('messages.Add Products')}}</a>
+                              <a class="dropdown-item" href="{{route("product.index")}}">@lang('messages.Show Products')</a>
+                              
+                            </div>
+                          </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

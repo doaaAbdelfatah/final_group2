@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AddNewUser;
 use App\Models\User;
 use App\Models\Contacts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -15,7 +18,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        switch(Auth::user()->role){
+            case "super admin":
+                $users = User::all();
+            break;
+            case "admin":
+                $users = User::whereIn("role" , ["user" ,"seller"])->get();
+            break;
+        }     
+        
         return view("users.index")->with("users" ,$users);
     }
 
@@ -26,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view("users.create");
     }
 
     /**
@@ -37,7 +48,32 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      
+        $request->validate([
+            "name"=>"required",
+            "email"=>"required"
+        ]);
+        if (Auth::user()->role =="super admin"){
+            $role = $request->role;
+        }else if(Auth::user()->role =="admin")
+        {
+            $role = "seller";
+        }else{
+            return \redirect()->back();
+        }
+
+        $text ="abcdefghijklmnopqrstuvxyz01234567893428#*$()";
+        $text = str_shuffle($text);
+        $pw = substr($text,1 ,10);
+        $u = User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "role" => $role,
+            "password" => bcrypt($pw)
+
+        ]);
+        Mail::to($request->email)->send(new AddNewUser($u ,$pw));
+        return \redirect()->route("users.all");
     }
 
     /**

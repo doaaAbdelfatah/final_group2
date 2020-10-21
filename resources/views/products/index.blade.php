@@ -40,7 +40,7 @@
                         <td>{{$product->qty}}</td>
                         <td>{{($product->category)?$product->category->name:""}}</td>
                         <td>{{($product->brand)?$product->brand->name:""}}</td>
-                        <th>&nbsp;</th>
+                        <th>{{$product->seller->name}}</th>
                         <td style="width: 120px"><a class="btn  btn-sm btn-info"
                             href="/product/images/{{$product->id}}/create">Add Images</a></td>
                         <td style="width: 50px"><a class="btn  btn-sm btn-success"

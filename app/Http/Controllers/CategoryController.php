@@ -110,4 +110,9 @@ class CategoryController extends Controller
             }
         return redirect()->route("category.index");
     }
+
+    function get_products (Category $category){
+       
+        return view ("cat_products")->with(compact("category"));
+    }
 }

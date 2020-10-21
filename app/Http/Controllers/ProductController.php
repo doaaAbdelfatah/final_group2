@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\ProductImage;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -16,7 +19,18 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Products::all();
+        switch(Auth::user()->role){
+            case "super admin": case 'admin':
+                $products = Products::all();
+            break;
+            case "seller":
+                $products = Products::where("seller_id" ,Auth::user()->id )->get();
+            break;
+            default:
+            return redirect()->back();
+        }
+
+      
         return view('products.index', ['products' => $products]);
     }
 
@@ -45,8 +59,20 @@ class ProductController extends Controller
             "category_id" => "required|exists:categories,id",
             "brand_id" => "nullable|exists:brands,id"
         ]);
+        
+        $p = Products::create($request->all()  + ["seller_id" => Auth::user()->id]);
 
-        $p = Products::create($request->all());
+        foreach($request->file("img") as $img){
+        $img_name = Storage::disk('public')->put('product_imgs',$img);
+
+        $pi = new ProductImage();
+        $pi->img = $img_name;
+        $pi->product_id = $p->id;
+        $pi->comments = $request->comments;
+        $pi->save();
+        }
+        
+        
         return redirect()->route('product.index');
     }
 

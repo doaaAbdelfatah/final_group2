@@ -4,7 +4,7 @@
     <div class="row  mt-5 mb-5">
         <div class="col-md-5">
             <h2>Add New Product</h2>
-            <form method="POST" action="/product">
+            <form method="POST" action="/product" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="">Name</label>
@@ -51,6 +51,13 @@
                         @endforeach
                     </select>
                     @error('brand_id')
+                    <span class="text-danger"> {{$message}}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="">Image</label>
+                    <input type="file" multiple name="img[]" id="img" class="form-control">
+                    @error('img')
                     <span class="text-danger"> {{$message}}</span>
                     @enderror
                 </div>

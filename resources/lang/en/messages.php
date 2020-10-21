@@ -10,7 +10,7 @@ return [
     "Show All categories" =>"Show All categories",
     "Add New Category" =>"Add New Category",
     "Brands" =>"Brands",
-    "Add Products" =>"{1} :txt Product |[2,*] :txt Products",
+    "Add Products" =>"Add Product",
     "Products" =>"Products",
     "Show Products" =>"Show Products",
     "Categories" =>"Categories",
