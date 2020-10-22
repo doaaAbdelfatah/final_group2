@@ -79,3 +79,5 @@ Route::post("/lang" ,function(Request $request){
  Route::prefix("/user")->group(function(){
     Route::get("/category/{category}" ,[CategoryController::class ,"get_products"]);
 });
+
+Route::view("/bag" ,"bag")->name("bag");

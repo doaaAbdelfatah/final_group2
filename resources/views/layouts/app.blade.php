@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -62,6 +62,12 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <span class="badge badge-pill badge-danger" id="cart_item">0</span>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link " href="{{route("bag")}}">Bag</a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -100,5 +106,19 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/app.js') }}"  ></script>
+    <script>
+        $(document).ready(function(){
+            if(localStorage.bag)
+              bag = JSON.parse(localStorage.bag);
+          else bag =[];
+          $("#cart_item").html(bag.length);
+    //   console.log(bag);
+
+  
+        });
+      </script>
+   @yield('script')
+    
 </body>
 </html>
