@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ContactTypeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\SupplierController;
@@ -81,3 +82,7 @@ Route::post("/lang" ,function(Request $request){
 });
 
 Route::view("/bag" ,"bag")->name("bag");
+
+Route::get("/order/index" , [OrderController::class ,"index"])->middleware(["auth"])->name("order.index");
+Route::get("/order/create" , [OrderController::class ,"create"])->middleware(["auth"]);
+Route::post("/order/store" , [OrderController::class ,"store"])->middleware(["auth"]);
